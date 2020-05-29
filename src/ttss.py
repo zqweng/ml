@@ -7,6 +7,10 @@ Created on 2016年4月18日
 
 from spam.spamEmail import spamEmailBayes
 import re
+from pathlib import Path
+
+data_root = Path("/home/johnny/code/BayesSpam")
+
 #spam类对象
 spam=spamEmailBayes()
 #保存词频的词典
@@ -19,9 +23,9 @@ wordsDict={}
 #保存预测结果,key为文件名，值为预测类别
 testResult={}
 #分别获得正常邮件、垃圾邮件及测试文件名称列表
-normFileList=spam.get_File_List(r"E:\EclipseWorkspace\BayesSpam\data\normal")
-spamFileList=spam.get_File_List(r"E:\EclipseWorkspace\BayesSpam\data\spam")
-testFileList=spam.get_File_List(r"E:\EclipseWorkspace\BayesSpam\data\test")
+normFileList=spam.get_File_List(data_root/"data"/"normal")
+spamFileList=spam.get_File_List(data_root/"data"/"spam")
+testFileList=spam.get_File_List(data_root/"data"/"test")
 #获取训练集中正常邮件与垃圾邮件的数量
 normFilelen=len(normFileList)
 spamFilelen=len(spamFileList)
@@ -30,7 +34,7 @@ stopList=spam.getStopWords()
 #获得正常邮件中的词频
 for fileName in normFileList:
     wordsList.clear()
-    for line in open("../data/normal/"+fileName):
+    for line in open("../data/normal/"+fileName, encoding="GBK"):
         #过滤掉非中文字符
         rule=re.compile(r"[^\u4e00-\u9fa5]")
         line=rule.sub("",line)
@@ -44,7 +48,7 @@ normDict=wordsDict.copy()
 wordsDict.clear()
 for fileName in spamFileList:
     wordsList.clear()
-    for line in open("../data/spam/"+fileName):
+    for line in open("../data/spam/"+fileName, encoding="GBK"):
         rule=re.compile(r"[^\u4e00-\u9fa5]")
         line=rule.sub("",line)
         spam.get_word_list(line,wordsList,stopList)
@@ -56,7 +60,7 @@ for fileName in testFileList:
     testDict.clear( )
     wordsDict.clear()
     wordsList.clear()
-    for line in open("../data/test/"+fileName):
+    for line in open("../data/test/"+fileName, encoding="GBK"):
         rule=re.compile(r"[^\u4e00-\u9fa5]")
         line=rule.sub("",line)
         spam.get_word_list(line,wordsList,stopList)

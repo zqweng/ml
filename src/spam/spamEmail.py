@@ -6,11 +6,13 @@ Created on 2016年4月18日
 '''
 import jieba;
 import os;
+import pdb
+
 class spamEmailBayes:
     #获得停用词表
     def getStopWords(self):
         stopList=[]
-        for line in open("../data/中文停用词表.txt"):
+        for line in open("../data/chinese.txt", encoding="GBK"):
             stopList.append(line[:len(line)-1])
         return stopList;
     #获得词典
@@ -57,6 +59,7 @@ class spamEmailBayes:
             if word not in spamDict.keys() and word not in normDict.keys():
                 #若该词不在脏词词典中，概率设为0.4
                 wordProbList.setdefault(word,0.4)
+
         sorted(wordProbList.items(),key=lambda d:d[1],reverse=True)[0:15]
         return (wordProbList)
     
